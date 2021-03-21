@@ -20,6 +20,20 @@ class Application extends React.Component {
 	}
 }
 
+const Clipping = ({ content }: { content: string }) => {
+	return (
+		<article className="clippings-list-item">
+			<div className="clipping-text" data-disabled="true">
+				{content}
+			</div>
+			<div className="clipping-controls">
+				<button>&rarr; Clipboard</button>
+				<button>Update</button>
+			</div>
+		</article>
+	);
+};
+
 render(<Application />, document.getElementById('application'));
 
 console.log(
