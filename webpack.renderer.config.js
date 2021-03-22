@@ -15,4 +15,9 @@ module.exports = {
 	resolve: {
 		extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
 	},
+	externals: {
+		// Possible drivers for knex - we'll ignore them
+		sqlite3: 'commonjs sqlite3',
+		knex: 'commonjs knex',
+	},
 };

@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -15,14 +15,36 @@ const createWindow = (): void => {
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
+			enableRemoteModule: true,
 		},
 	});
 
 	// and load the index.html of the app.
 	mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-	// Open the DevTools.
-	mainWindow.webContents.openDevTools();
+	const createClippingShortcut = globalShortcut.register(
+		'CommandOrControl+!',
+		() => {
+			mainWindow.webContents.send('create-new-clipping');
+		}
+	);
+
+	const writeRecentClippingToClipboard = globalShortcut.register(
+		'CommandOrControl+@',
+		() => {
+			mainWindow.webContents.send('write-recent-clipping');
+		}
+	);
+
+	if (!createClippingShortcut) {
+		console.error('Clipping Registration Failed', 'create-new-clipping');
+	}
+	if (!writeRecentClippingToClipboard) {
+		console.error(
+			'Write to clipboard registration failed',
+			'write-recent-clipping'
+		);
+	}
 };
 
 // This method will be called when Electron has finished
